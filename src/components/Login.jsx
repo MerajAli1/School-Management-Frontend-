@@ -1,6 +1,18 @@
-import React from "react";
+import axios from "axios";
+import React, { useState } from "react";
 
 const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const Adminlogin = async (e) => {
+    e.preventDefault();
+    const res = await axios.post("http://localhost:3000/login",{
+      email,
+      password
+    });
+    console.log(res.data);
+  };
   return (
     <>
       {/* <!-- Section: Design Block --> */}
@@ -28,47 +40,36 @@ const Login = () => {
               <div className="col-lg-6 mb-5 mb-lg-0">
                 <div className="card">
                   <div className="card-body py-5 px-md-5">
-                    <p className="text-center my-5 display-5 fw-bold ls-tight">Login</p>
+                    <p className="text-center my-5 display-5 fw-bold ls-tight">
+                      Login
+                    </p>
                     <form>
                       {/* <!-- Email input --> */}
                       <div data-mdb-input-init className="form-outline mb-4">
                         <input
+                          onChange={(e) => setEmail(e.target.value)}
+                          placeholder="Email Address"
                           type="email"
                           id="form3Example3"
                           className="form-control"
                         />
-                        <label className="form-label" for="form3Example3">
+                        {/* <label className="form-label" htmlFor="form3Example3">
                           Email address
-                        </label>
+                        </label> */}
                       </div>
 
                       {/* <!-- Password input --> */}
                       <div data-mdb-input-init className="form-outline mb-4">
                         <input
+                          onChange={(e) => setPassword(e.target.value)}
+                          placeholder="Password"
                           type="password"
                           id="form3Example4"
                           className="form-control"
                         />
-                        <label className="form-label" for="form3Example4">
+                        {/* <label className="form-label" htmlFor="form3Example4">
                           Password
-                        </label>
-                      </div>
-
-                      {/* <!-- Checkbox --> */}
-                      <div className="form-check d-flex justify-content-center mb-4">
-                        <input
-                          className="form-check-input me-2"
-                          type="checkbox"
-                          value=""
-                          id="form2Example33"
-                          checked
-                        />
-                        <label
-                          className="form-check-label"
-                          for="form2Example33"
-                        >
-                          Subscribe to our newsletter
-                        </label>
+                        </label> */}
                       </div>
 
                       {/* <!-- Submit button --> */}
@@ -77,6 +78,7 @@ const Login = () => {
                         data-mdb-button-init
                         data-mdb-ripple-init
                         className="btn btn-primary btn-block mb-4"
+                        onClick={Adminlogin}
                       >
                         Sign up
                       </button>

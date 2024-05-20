@@ -1,6 +1,37 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [schoolName, setSchoolName] = useState("");
+  const adminRegister = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post("http://localhost:3000/register", {
+        email,
+        password,
+        name,
+        schoolName,
+      });
+      console.log(res, "RES");
+      if (res.data.token) {
+        const token = res.data.token;
+        const loginToken = localStorage.setItem("token", JSON.stringify(token));
+        console.log(loginToken, "LOGIN TOKEN");
+        navigate("/");
+      } else {
+        navigate("/signup");
+      }
+      console.log(res.data.err.message, "ERROR MESSAGE");
+     
+    } catch (error) {
+      console.log(error, "ERROR OCCURED");
+    }
+  };
   return (
     <>
       {/* <!-- Section: Design Block --> */}
@@ -8,18 +39,17 @@ const Signup = () => {
         {/* <!-- Background image --> */}
         <div
           className="p-5 bg-image"
-          style={{backgroundImage:" url('https://mdbootstrap.com/img/new/textures/full/171.jpg')",
-        height: "300px"}}
-        
+          style={{
+            backgroundImage:
+              " url('https://mdbootstrap.com/img/new/textures/full/171.jpg')",
+            height: "300px",
+          }}
         ></div>
         {/* <!-- Background image --> */}
 
         <div
           className="card mx-4 mx-md-5 shadow-5-strong bg-body-tertiary"
-          style=
-       {{ marginTop: "-100px",
-        backdropFilter: "blur(30px)"}}
-        
+          style={{ marginTop: "-100px", backdropFilter: "blur(30px)" }}
         >
           <div className="card-body py-5 px-md-5">
             <div className="row d-flex justify-content-center">
@@ -33,11 +63,13 @@ const Signup = () => {
                       <div data-mdb-input-init className="form-outline">
                         <input
                           type="text"
+                          name="schoolName"
                           id="form3Example1"
                           className="form-control"
+                          onChange={(e) => setSchoolName(e.target.value)}
                         />
-                        <label className="form-label" for="form3Example1">
-                          First name
+                        <label className="form-label" htmlFor="form3Example1">
+                          School Name
                         </label>
                       </div>
                     </div>
@@ -45,11 +77,13 @@ const Signup = () => {
                       <div data-mdb-input-init className="form-outline">
                         <input
                           type="text"
+                          name="name"
                           id="form3Example2"
                           className="form-control"
+                          onChange={(e) => setName(e.target.value)}
                         />
-                        <label className="form-label" for="form3Example2">
-                          Last name
+                        <label className="form-label" htmlFor="form3Example2">
+                          Name
                         </label>
                       </div>
                     </div>
@@ -61,8 +95,10 @@ const Signup = () => {
                       type="email"
                       id="form3Example3"
                       className="form-control"
+                      name="email"
+                      onChange={(e) => setEmail(e.target.value)}
                     />
-                    <label className="form-label" for="form3Example3">
+                    <label className="form-label" htmlFor="form3Example3">
                       Email address
                     </label>
                   </div>
@@ -72,33 +108,25 @@ const Signup = () => {
                     <input
                       type="password"
                       id="form3Example4"
+                      name="password"
                       className="form-control"
+                      onChange={(e) => setPassword(e.target.value)}
                     />
-                    <label className="form-label" for="form3Example4">
+                    <label className="form-label" htmlFor="form3Example4">
                       Password
                     </label>
                   </div>
 
                   {/* <!-- Checkbox --> */}
-                  <div className="form-check d-flex justify-content-center mb-4">
-                    <input
-                      className="form-check-input me-2"
-                      type="checkbox"
-                      value=""
-                      id="form2Example33"
-                      checked
-                    />
-                    <label className="form-check-label" for="form2Example33">
-                      Subscribe to our newsletter
-                    </label>
-                  </div>
+                  <div className="form-check d-flex justify-content-center mb-4"></div>
 
                   {/* <!-- Submit button --> */}
                   <button
-                    type="submit"
+                    type="button"
                     data-mdb-button-init
                     data-mdb-ripple-init
                     className="btn btn-primary btn-block mb-4"
+                    onClick={adminRegister}
                   >
                     Sign up
                   </button>
