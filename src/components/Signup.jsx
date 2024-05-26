@@ -11,7 +11,7 @@ const Signup = () => {
   const adminRegister = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:3000/register", {
+      const res = await axios.post("http://localhost:3000/adminRegister", {
         email,
         password,
         name,
@@ -26,7 +26,7 @@ const Signup = () => {
       } else {
         navigate("/signup");
       }
-      console.log(res.data.err.message, "ERROR MESSAGE");
+      // console.log(res.data.err.message, "ERROR MESSAGE");
      
     } catch (error) {
       console.log(error, "ERROR OCCURED");

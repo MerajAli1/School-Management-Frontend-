@@ -1,17 +1,23 @@
 import axios from "axios";
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { baseURL } from "../api/api";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const navigate = useNavigate();
   const Adminlogin = async (e) => {
     e.preventDefault();
-    const res = await axios.post("http://localhost:3000/login",{
+    const res = await axios.post(`${baseURL}/adminLogin`, {
       email,
-      password
+      password,
     });
-    console.log(res.data);
+    const token = localStorage.setItem("token", JSON.stringify(res.data.token));
+    console.log(res.data.token);
+    if (res.data.token) {
+      navigate("/");
+    }
   };
   return (
     <>
