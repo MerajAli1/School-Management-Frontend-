@@ -16,7 +16,7 @@ const Login = () => {
     const token = localStorage.setItem("token", JSON.stringify(res.data.token));
     console.log(res.data.token);
     if (res.data.token) {
-      navigate("/");
+      navigate("/dashboard/adminHome");
     }
   };
   return (

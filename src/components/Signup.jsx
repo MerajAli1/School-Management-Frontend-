@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { baseURL } from "../api/api";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -11,7 +12,7 @@ const Signup = () => {
   const adminRegister = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:3000/adminRegister", {
+      const res = await axios.post(`${baseURL}/adminRegister`, {
         email,
         password,
         name,
@@ -22,7 +23,7 @@ const Signup = () => {
         const token = res.data.token;
         const loginToken = localStorage.setItem("token", JSON.stringify(token));
         console.log(loginToken, "LOGIN TOKEN");
-        navigate("/");
+        navigate("/dashboard/adminHome");
       } else {
         navigate("/signup");
       }
