@@ -16,8 +16,6 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
 import AdminHomePage from "../admin/AdminHomePage";
 import Attendance from "../admin/Attendance";
 import Notice from "../admin/Notice";
@@ -163,18 +161,13 @@ export default function Dashboard() {
             <ListItem key={index} disablePadding>
               <ListItemButton onClick={() => navigateHandler(route.path)}>
                 <ListItemIcon>
-                  {/* {index % 2 === 0 ? (
-                    <i class="fa-solid fa-house"></i>
-                  ) : (
-                    <i className="fa-solid fa-clipboard-user"></i>
-                  )} */}
-                  {index === 0 && <i style={{fontSize:"25px"}} class="fa-solid fa-house"></i>}
+                  {index === 0 && <i style={{fontSize:"25px"}} className="fa-solid fa-house"></i>}
                   {index === 1 && (
                     <i style={{fontSize:"25px"}} className="fa-solid fa-clipboard-user"></i>
                   )}
-                  {index === 2 && <i style={{fontSize:"25px"}} class="fa-regular fa-clipboard"></i>}
-                  {index === 3 && <i style={{fontSize:"25px"}} class="fa-solid fa-id-card"></i>}
-                  {index === 4 &&  <i style={{fontSize:"25px"}} class="fa-solid fa-chalkboard-user"></i>}
+                  {index === 2 && <i style={{fontSize:"25px"}} className="fa-regular fa-clipboard"></i>}
+                  {index === 3 && <i style={{fontSize:"25px"}} className="fa-solid fa-id-card"></i>}
+                  {index === 4 &&  <i style={{fontSize:"25px"}} className="fa-solid fa-chalkboard-user"></i>}
                 </ListItemIcon>
                 <ListItemText primary={route.name} />
               </ListItemButton>
@@ -183,7 +176,7 @@ export default function Dashboard() {
           <Button
             onClick={() => {
               localStorage.removeItem("token");
-              navigate("/login");
+              navigate("/");
             }}
             variant="contained"
           >
@@ -191,49 +184,9 @@ export default function Dashboard() {
           </Button>
         </List>
         <Divider />
-        {/* <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List> */}
       </Drawer>
       <Main open={open}>
         <DrawerHeader />
-        {/* <Typography paragraph>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-          tempor incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus non
-          enim praesent elementum facilisis leo vel. Risus at ultrices mi tempus
-          imperdiet. Semper risus in hendrerit gravida rutrum quisque non tellus.
-          Convallis convallis tellus id interdum velit laoreet id donec ultrices.
-          Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl suscipit
-          adipiscing bibendum est ultricies integer quis. Cursus euismod quis viverra
-          nibh cras. Metus vulputate eu scelerisque felis imperdiet proin fermentum
-          leo. Mauris commodo quis imperdiet massa tincidunt. Cras tincidunt lobortis
-          feugiat vivamus at augue. At augue eget arcu dictum varius duis at
-          consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem donec massa
-          sapien faucibus et molestie ac.
-        </Typography>
-        <Typography paragraph>
-          Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper
-          eget nulla facilisi etiam dignissim diam. Pulvinar elementum integer enim
-          neque volutpat ac tincidunt. Ornare suspendisse sed nisi lacus sed viverra
-          tellus. Purus sit amet volutpat consequat mauris. Elementum eu facilisis
-          sed odio morbi. Euismod lacinia at quis risus sed vulputate odio. Morbi
-          tincidunt ornare massa eget egestas purus viverra accumsan in. In hendrerit
-          gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem
-          et tortor. Habitant morbi tristique senectus et. Adipiscing elit duis
-          tristique sollicitudin nibh sit. Ornare aenean euismod elementum nisi quis
-          eleifend. Commodo viverra maecenas accumsan lacus vel facilisis. Nulla
-          posuere sollicitudin aliquam ultrices sagittis orci a.
-        </Typography> */}
-
         <Routes>
           <Route path="/adminHome" element={<AdminHomePage />} />
           <Route path="/attendance" element={<Attendance />} />

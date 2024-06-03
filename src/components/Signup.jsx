@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { baseURL } from "../api/api";
 
 const Signup = () => {
@@ -12,23 +12,25 @@ const Signup = () => {
   const adminRegister = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(`${baseURL}/adminRegister`, {
-        email,
-        password,
-        name,
-        schoolName,
-      });
+      const res = await axios.post(
+        `${baseURL}/adminRegister`,
+        {
+          email,
+          password,
+          name,
+          schoolName,
+        }
+      );
       console.log(res, "RES");
-      if (res.data.token) {
+      if (res.status === 200) {
         const token = res.data.token;
         const loginToken = localStorage.setItem("token", JSON.stringify(token));
-        console.log(loginToken, "LOGIN TOKEN");
+        console.log(token, "LOGIN TOKEN");
         navigate("/dashboard/adminHome");
       } else {
         navigate("/signup");
       }
       // console.log(res.data.err.message, "ERROR MESSAGE");
-     
     } catch (error) {
       console.log(error, "ERROR OCCURED");
     }
@@ -133,44 +135,13 @@ const Signup = () => {
                   </button>
 
                   {/* <!-- Register buttons --> */}
-                  <div className="text-center">
-                    <p>or sign up with:</p>
-                    <button
-                      type="button"
-                      data-mdb-button-init
-                      data-mdb-ripple-init
-                      className="btn btn-link btn-floating mx-1"
-                    >
-                      <i className="fab fa-facebook-f"></i>
-                    </button>
-
-                    <button
-                      type="button"
-                      data-mdb-button-init
-                      data-mdb-ripple-init
-                      className="btn btn-link btn-floating mx-1"
-                    >
-                      <i className="fab fa-google"></i>
-                    </button>
-
-                    <button
-                      type="button"
-                      data-mdb-button-init
-                      data-mdb-ripple-init
-                      className="btn btn-link btn-floating mx-1"
-                    >
-                      <i className="fab fa-twitter"></i>
-                    </button>
-
-                    <button
-                      type="button"
-                      data-mdb-button-init
-                      data-mdb-ripple-init
-                      className="btn btn-link btn-floating mx-1"
-                    >
-                      <i className="fab fa-github"></i>
-                    </button>
-                  </div>
+                  <div className="text-center"></div>
+                  <p className="text-center">
+                    Alread have an account?{" "}
+                    <NavLink style={{ textDecoration: "none" }} to={"/login"}>
+                      Log in
+                    </NavLink>
+                  </p>
                 </form>
               </div>
             </div>
