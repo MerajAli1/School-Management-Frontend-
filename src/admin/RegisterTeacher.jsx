@@ -37,6 +37,19 @@ export default function SignUp() {
   // State for Add Button
   const [add, setAdd] = useState(false);
 
+  // State for Teacher Subject
+  const [teacherSubject, setTeacherSubject] = useState([
+    {
+      subName: "Maths",
+      classes: [
+        {
+          class: "Nine",
+          section: "A",
+        }
+      ],
+    }
+  ]);
+
   //States for input fields
   const [name, setName] = useState("");
   const [classes, setClasses] = useState("");
@@ -49,20 +62,59 @@ export default function SignUp() {
   const [teachClass, setTeachClass] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [middleArray, setMiddleArray] = useState([]);
+  const [array, setArray] = useState([]);
+  // teachSubject: [
+  //   {
+  //     subName: {
+  //       type: String,
+  //       required: true,
+  //     },
+  //     classes: [
+  //       {
+  //         class: {
+  //           type: String,
+  //           required: true,
+  //         },
+  //         section: {
+  //           type: String,
+  //           required: true,
+  //         },
+  //       },
+  //     ],
+  //   },
+  // ],
+  // Add Button Function
   const Add = () => {
-    const array = [];
-    const classesArray = {
-      teachClass: teachClass,
-      teachClassSection: teachClassSection,
-    };
-    setMiddleArray([...middleArray, classesArray]);
-    array.push({ teacherSubject: teachSubject, middleArray });
-    console.log(array);
+    // let teacherSubject = [
+    //   {
+    //     subName: teachSubject,
+    //     classes: [
+    //       {
+    //         class: teachClass,
+    //         section: teachClassSection,
+    //       },
+    //     ],
+    //   },
+    // ];
+    // console.log(teacherSubject);
+
+    setTeacherSubject(teacherSubject.map(subject => {
+      if (subject.subName === "Maths") {
+        return {
+          ...subject,
+          classes: [...subject.classes, { class: teachClass, section: teachClassSection }],
+        };
+      } else {
+        return subject;
+      }
+    }));
+    
+    console.log(teacherSubject);
+
+
+
   };
-  useEffect(()=>{
-    console.log(middleArray)
-  },[middleArray])
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
