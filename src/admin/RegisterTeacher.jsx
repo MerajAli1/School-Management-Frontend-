@@ -2,16 +2,14 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { InputLabel, MenuItem, Select } from "@mui/material";
 import { useEffect, useState } from "react";
-
+import ModalForTeacherRegister from "./ModalForTeacherRegister";
 // TODO remove, this demo shouldn't need to reset the theme.
 
 const defaultTheme = createTheme();
@@ -25,31 +23,8 @@ export default function SignUp() {
       password: data.get("password"),
     });
   };
-
-  const [age, setAge] = useState("");
-
-  const handleChange = (event) => {
-    setAge(event.target.value);
-  };
-  // State For Add to input fields on clicking on add button
-  const [section, setSection] = useState(false);
-
   // State for Add Button
   const [add, setAdd] = useState(false);
-
-  // State for Teacher Subject
-  const [teacherSubject, setTeacherSubject] = useState([
-    {
-      subName: "Maths",
-      classes: [
-        {
-          class: "Nine",
-          section: "A",
-        }
-      ],
-    }
-  ]);
-
   //States for input fields
   const [name, setName] = useState("");
   const [classes, setClasses] = useState("");
@@ -57,64 +32,8 @@ export default function SignUp() {
   const [sectionVal, setSectionVal] = useState("");
   const [qualification, setQualification] = useState("");
   const [salary, setSalary] = useState("");
-  const [teachSubject, setTeachSubject] = useState("");
-  const [teachClassSection, setTeachClassSection] = useState("");
-  const [teachClass, setTeachClass] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [array, setArray] = useState([]);
-  // teachSubject: [
-  //   {
-  //     subName: {
-  //       type: String,
-  //       required: true,
-  //     },
-  //     classes: [
-  //       {
-  //         class: {
-  //           type: String,
-  //           required: true,
-  //         },
-  //         section: {
-  //           type: String,
-  //           required: true,
-  //         },
-  //       },
-  //     ],
-  //   },
-  // ],
-  // Add Button Function
-  const Add = () => {
-    // let teacherSubject = [
-    //   {
-    //     subName: teachSubject,
-    //     classes: [
-    //       {
-    //         class: teachClass,
-    //         section: teachClassSection,
-    //       },
-    //     ],
-    //   },
-    // ];
-    // console.log(teacherSubject);
-
-    setTeacherSubject(teacherSubject.map(subject => {
-      if (subject.subName === "Maths") {
-        return {
-          ...subject,
-          classes: [...subject.classes, { class: teachClass, section: teachClassSection }],
-        };
-      } else {
-        return subject;
-      }
-    }));
-    
-    console.log(teacherSubject);
-
-
-
-  };
-
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
@@ -218,68 +137,7 @@ export default function SignUp() {
                 />
               </Grid>
 
-              {/* Teacher Subject Input Field */}
-              <Grid item xs={6}>
-                <TextField
-                  onChange={(e) => setTeachSubject(e.target.value)}
-                  required
-                  fullWidth
-                  id="teacherSubject"
-                  label="Teacher Subject"
-                  name="teacherSubject"
-                />
-              </Grid>
-              <Grid item xs={6}>
-                {section === false ? (
-                  <Button
-                    onClick={() => setSection(true)}
-                    className="py-3"
-                    variant="contained"
-                  >
-                    Add Class
-                  </Button>
-                ) : null}
-              </Grid>
-
-              {section === true ? (
-                <>
-                  {/* Teach Class input field */}
-
-                  <Grid item xs={6}>
-                    <TextField
-                      onChange={(e) => setTeachClass(e.target.value)}
-                      required
-                      fullWidth
-                      id="teachClass"
-                      label="Teach Class"
-                      name="teachClass"
-                    />
-                  </Grid>
-
-                  {/* Teach Class Section input field */}
-
-                  <Grid item xs={6}>
-                    <TextField
-                      onChange={(e) => setTeachClassSection(e.target.value)}
-                      required
-                      fullWidth
-                      id="teachClassSection"
-                      label="Teach Class Section"
-                      name="teachClassSection"
-                    />
-                  </Grid>
-
-                  <Grid item xs={12}>
-                    <Box></Box>
-                  </Grid>
-
-                  <Grid item xs={12}>
-                    <Button onClick={Add} className="px-5" variant="contained">
-                      ADD
-                    </Button>
-                  </Grid>
-                </>
-              ) : null}
+              
 
               {/* Email Input Field */}
               <Grid item xs={12}>
@@ -306,6 +164,7 @@ export default function SignUp() {
                 />
               </Grid>
             </Grid>
+            <ModalForTeacherRegister/>
             {/* Register Teacher Button */}
             <Button
               type="submit"

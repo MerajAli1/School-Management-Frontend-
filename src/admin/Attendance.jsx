@@ -66,6 +66,7 @@ const Attendance = () => {
         }
       );
       console.log(res.data, "ATTENDANCE Submitted");
+      alert("Attendance Submitted");
     } catch (error) {
       console.log(error, "ERROR");
     }
