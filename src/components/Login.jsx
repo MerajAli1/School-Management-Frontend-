@@ -2,7 +2,8 @@ import axios from "axios";
 import React, { useState } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { baseURL } from "../api/api";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -13,24 +14,91 @@ const Login = () => {
   const role = location?.state?.role;
   console.log(role, "ROLE");
 
+  // Toastify Error Notification
+  const notifyError = () =>
+    toast.error("Fill all the fields!", {
+      position: "top-center",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
+
+  // Toastify Success Notification
+  const notifySuccess = () =>
+    toast.success("Signed In Successfully", {
+      position: "top-center",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
+
+  const errorHandling = () => {
+    if (email === "" && password === "") {
+      notifyError();
+    } else if (!email.trim()) {
+      toast.error("Email is Required!", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (!password.trim()) {
+      toast.error("Password is Required!", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } else if (email && password) {
+      toast.error("Wrong Credentials", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    }
+  };
   const Adminlogin = async (e) => {
     e.preventDefault();
+    // ERROR HANDLING
+    errorHandling();
     // FOR ADMIN LOGIN
     if (role === "Admin") {
-      const res = await axios.post(
-        `${baseURL}/adminLogin`,
-        {
+      try {
+        const res = await axios.post(`${baseURL}/adminLogin`, {
           email,
           password,
+        });
+        const token = localStorage.setItem(
+          "token",
+          JSON.stringify(res.data.token)
+        );
+        console.log(res.data.token);
+        if (res.data.token) {
+          navigate("/dashboard/adminHome");
         }
-      );
-      const token = localStorage.setItem(
-        "token",
-        JSON.stringify(res.data.token)
-      );
-      console.log(res.data.token);
-      if (res.data.token) {
-        navigate("/dashboard/adminHome");
+      } catch (error) {
+        console.log("error", error);
       }
       // FOR STUDENT LOGIN
     } else if (role === "Student") {
@@ -64,6 +132,7 @@ const Login = () => {
       navigate("/");
     }
   };
+
   return (
     <>
       {/* <!-- Section: Design Block --> */}
@@ -155,6 +224,18 @@ const Login = () => {
         {/* <!-- Jumbotron --> */}
       </section>
       {/* <!-- Section: Design Block --> */}
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
     </>
   );
 };
