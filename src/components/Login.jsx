@@ -6,15 +6,19 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Button, CircularProgress } from "@mui/material";
 const Login = () => {
+  // State Variables
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [respose, setResponse] = useState("");
   const [loading, setLoading] = useState(false);
+
+  // Navigating to AdminHome Page
   const navigate = useNavigate();
 
+  // Getting Role from location state
   const location = useLocation();
   const role = location?.state?.role;
-  console.log(role, "ROLE");
+  // console.log(role, "ROLE");
 
   // Toastify Error Notification
   const notifyError = () =>
@@ -41,11 +45,14 @@ const Login = () => {
       progress: undefined,
       theme: "dark",
     });
-
+  // Error Handling Function
   const errorHandling = () => {
+    //Checking if email and password is empty
     if (email === "" && password === "") {
       notifyError();
-    } else if (!email.trim()) {
+    }
+    //Checking if email is empty
+    else if (!email.trim()) {
       toast.error("Email is Required!", {
         position: "top-center",
         autoClose: 3000,
@@ -56,7 +63,9 @@ const Login = () => {
         progress: undefined,
         theme: "colored",
       });
-    } else if (!password.trim()) {
+    }
+    //Checking if password is empty
+    else if (!password.trim()) {
       toast.error("Password is Required!", {
         position: "top-center",
         autoClose: 3000,
@@ -67,7 +76,11 @@ const Login = () => {
         progress: undefined,
         theme: "colored",
       });
-    } else if (
+    }
+    //Checking if email & password both are incorrect
+
+    //This Condition is not working properly
+    else if (
       respose === "failed" ||
       respose === "eamil or apssword is incorrect"
     ) {
@@ -85,7 +98,8 @@ const Login = () => {
       setLoading(false);
     }
   };
-  const Adminlogin = async (e) => {
+  // Admin,Student,Teacher Login Function
+  const login = async (e) => {
     e.preventDefault();
     // FOR ADMIN LOGIN
     if (role === "Admin") {
@@ -103,7 +117,7 @@ const Login = () => {
         errorHandling();
         //Setting response msg for validation in errorHandling function
         setResponse(res.data.msg);
-        console.log(res.data);
+        console.log(res.data.token);
         // Condition for redirecting to adminHome page
         if (res.data.token) {
           setLoading(true); //Loading Spinner
@@ -112,9 +126,10 @@ const Login = () => {
         }
       } catch (error) {
         console.log("error", error);
-      }
-      // FOR STUDENT LOGIN
-    } else if (role === "Student") {
+      } 
+    }
+    // FOR STUDENT LOGIN
+    else if (role === "Student") {
       const res = await axios.post(`${baseURL}/studentLogin`, {
         email,
         password,
@@ -214,7 +229,7 @@ const Login = () => {
                         data-mdb-button-init
                         data-mdb-ripple-init
                         className="btn btn-primary btn-block mb-4"
-                        onClick={Adminlogin}
+                        onClick={login}
                       >
                         {loading ? <CircularProgress /> : "Sign in"}
                       </Button>
@@ -242,6 +257,8 @@ const Login = () => {
         {/* <!-- Jumbotron --> */}
       </section>
       {/* <!-- Section: Design Block --> */}
+
+      {/* Toastify */}
       <ToastContainer
         position="top-center"
         autoClose={5000}
