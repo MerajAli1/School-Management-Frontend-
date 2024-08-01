@@ -4,10 +4,12 @@ import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { baseURL } from "../api/api";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Button, CircularProgress } from "@mui/material";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const [respose, setResponse] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const location = useLocation();
@@ -65,7 +67,11 @@ const Login = () => {
         progress: undefined,
         theme: "colored",
       });
-    } else if (email && password) {
+    } else if (
+      respose === "failed" ||
+      respose === "eamil or apssword is incorrect"
+    ) {
+      setLoading(true);
       toast.error("Wrong Credentials", {
         position: "top-center",
         autoClose: 3000,
@@ -76,12 +82,11 @@ const Login = () => {
         progress: undefined,
         theme: "colored",
       });
+      setLoading(false);
     }
   };
   const Adminlogin = async (e) => {
     e.preventDefault();
-    // ERROR HANDLING
-    errorHandling();
     // FOR ADMIN LOGIN
     if (role === "Admin") {
       try {
@@ -89,13 +94,21 @@ const Login = () => {
           email,
           password,
         });
+        // Setting token in local storage
         const token = localStorage.setItem(
           "token",
           JSON.stringify(res.data.token)
         );
-        console.log(res.data.token);
+        // ERROR HANDLING
+        errorHandling();
+        //Setting response msg for validation in errorHandling function
+        setResponse(res.data.msg);
+        console.log(res.data);
+        // Condition for redirecting to adminHome page
         if (res.data.token) {
-          navigate("/dashboard/adminHome");
+          setLoading(true); //Loading Spinner
+          notifySuccess(); //Toastify Success Notification
+          setTimeout(() => navigate("/dashboard/adminHome"), 5000);
         }
       } catch (error) {
         console.log("error", error);
@@ -114,8 +127,9 @@ const Login = () => {
       if (res.data.token) {
         navigate("/dashboard/adminHome");
       }
-      // FOR TEACHER LOGIN
-    } else if (role === "Teacher") {
+    }
+    // FOR TEACHER LOGIN
+    else if (role === "Teacher") {
       const res = await axios.post(`${baseURL}/teacherLogin`, {
         email,
         password,
@@ -136,6 +150,7 @@ const Login = () => {
   return (
     <>
       {/* <!-- Section: Design Block --> */}
+
       <section className="">
         {/* <!-- Jumbotron --> */}
         <div
@@ -191,15 +206,18 @@ const Login = () => {
                       </div>
 
                       {/* <!-- Submit button --> */}
-                      <button
+                      <Button
                         type="submit"
+                        fullWidth
+                        variant="contained"
+                        disabled={loading}
                         data-mdb-button-init
                         data-mdb-ripple-init
                         className="btn btn-primary btn-block mb-4"
                         onClick={Adminlogin}
                       >
-                        Login
-                      </button>
+                        {loading ? <CircularProgress /> : "Sign in"}
+                      </Button>
 
                       <div className="text-center">
                         {role === "Admin" ? (
