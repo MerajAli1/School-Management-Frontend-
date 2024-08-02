@@ -23,9 +23,10 @@ import { Route, Routes, useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
 import RegisterStudent from "../admin/RegisterStudent";
 import RegisterTeacher from "../admin/RegisterTeacher";
+import AllNotices from "../admin/AllNotices";
 
 const drawerWidth = 240;
-
+// Routes for the admin dashboard
 const routes = [
   {
     name: "Home",
@@ -33,7 +34,7 @@ const routes = [
     element: <AdminHomePage />,
   },
   {
-    name: "Attendance",
+    name: "Teacher Attendance",
     path: "attendance",
     element: <Attendance />,
   },
@@ -42,6 +43,7 @@ const routes = [
     path: "notice",
     element: <Notice />,
   },
+ 
   {
     name: "Register Student",
     path: "registerStudent",
@@ -51,9 +53,14 @@ const routes = [
     name: "Register Teacher",
     path: "registerTeacher",
     element: <RegisterTeacher />,
+  },
+  {
+    name: "All Notices",
+    path: "allNotice",
+    element: <AllNotices />,
   }
 ];
-
+// Styling for the admin dashboard
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
   ({ theme, open }) => ({
     flexGrow: 1,
@@ -73,6 +80,7 @@ const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
   })
 );
 
+// Styling for the admin dashboard
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== "open",
 })(({ theme, open }) => ({
@@ -89,7 +97,7 @@ const AppBar = styled(MuiAppBar, {
     }),
   }),
 }));
-
+// Styling for the admin dashboard
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
@@ -157,23 +165,55 @@ export default function Dashboard() {
         </DrawerHeader>
         <Divider />
         <List>
+          {/* //Mapping the routes for the admin dashboard */}
           {routes.map((route, index) => (
             <ListItem key={index} disablePadding>
               <ListItemButton onClick={() => navigateHandler(route.path)}>
                 <ListItemIcon>
-                  {index === 0 && <i style={{fontSize:"25px"}} className="fa-solid fa-house"></i>}
-                  {index === 1 && (
-                    <i style={{fontSize:"25px"}} className="fa-solid fa-clipboard-user"></i>
+                  {index === 0 && (
+                    <i
+                      style={{ fontSize: "25px" }}
+                      className="fa-solid fa-house"
+                    ></i>
                   )}
-                  {index === 2 && <i style={{fontSize:"25px"}} className="fa-regular fa-clipboard"></i>}
-                  {index === 3 && <i style={{fontSize:"25px"}} className="fa-solid fa-id-card"></i>}
-                  {index === 4 &&  <i style={{fontSize:"25px"}} className="fa-solid fa-chalkboard-user"></i>}
+                  {index === 1 && (
+                    <i
+                      style={{ fontSize: "25px" }}
+                      className="fa-solid fa-clipboard-user"
+                    ></i>
+                  )}
+                  {index === 2 && (
+                    <i
+                      style={{ fontSize: "25px" }}
+                      className="fa-regular fa-clipboard"
+                    ></i>
+                  )}
+                  {index === 3 && (
+                    <i
+                      style={{ fontSize: "25px" }}
+                      className="fa-solid fa-id-card"
+                    ></i>
+                  )}
+                  {index === 4 && (
+                    <i
+                      style={{ fontSize: "25px" }}
+                      className="fa-solid fa-chalkboard-user"
+                    ></i>
+                  )}
+                  {index === 5 && (
+                   <i
+                   style={{ fontSize: "25px" }}
+                   className="fa-regular fa-clipboard"
+                 ></i>
+                  )}
                 </ListItemIcon>
                 <ListItemText primary={route.name} />
               </ListItemButton>
             </ListItem>
           ))}
+          {/* //Logout button */}
           <Button
+            sx={{ margin: "auto", display: "block", marginTop: "20px" }}
             onClick={() => {
               localStorage.removeItem("token");
               navigate("/");
@@ -187,10 +227,12 @@ export default function Dashboard() {
       </Drawer>
       <Main open={open}>
         <DrawerHeader />
+        {/* // Routes for the admin dashboard */}
         <Routes>
           <Route path="/adminHome" element={<AdminHomePage />} />
           <Route path="/attendance" element={<Attendance />} />
           <Route path="/notice" element={<Notice />} />
+          <Route path="/allNotice" element={<AllNotices />} />
           <Route path="/registerStudent" element={<RegisterStudent />} />
           <Route path="/registerTeacher" element={<RegisterTeacher />} />
         </Routes>
