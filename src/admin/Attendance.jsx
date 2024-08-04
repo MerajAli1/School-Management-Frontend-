@@ -2,9 +2,15 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { baseURL } from "../api/api.js";
 import { TextField } from "@mui/material";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Loader from "../Loader/Loader.jsx";
+
 const Attendance = () => {
+  // Initialize state
   const [attendance, setAttendance] = useState([]);
   const [date, setDate] = useState("");
+  const [loading, setLoading] = useState(false);
 
   // Step 1: Initialize state
   //STATE FOR RADIO BUTTONS
@@ -26,29 +32,47 @@ const Attendance = () => {
   const getAttendance = async () => {
     //ACCESS TOKEN FROM LOCAL STORAGE
     const token = JSON.parse(localStorage.getItem("token"));
-    console.log(token, "TOKEN");
+    // console.log(token, "TOKEN");
+
     //GETTING ALL THE TEACHERS
+    setLoading(true);//SET LOADING TO TRUE
     try {
       const res = await axios.get(`${baseURL}/api/v1/admin/teachers`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log(res.data.data, "ATTENDANCE DATA");
+      // console.log(res.data.data, "ATTENDANCE DATA");
+
       //SETTING THE TEACHERS
       setAttendance(res.data.data);
     } catch (error) {
       console.log(error, "ERROR");
     }
+    setLoading(false);//SET LOADING TO FALSE
   };
 
   // Submit Attendance
   const submitAttendance = async (event) => {
     // Prevent default form submission
     event.preventDefault();
+    // Validation: Ensure attendance is selected for all teachers
+    const allStatusesSelected = attendance.every(
+      (teacher, index) => statuses[index]?.status
+    );
+    if (!allStatusesSelected) {
+      toast.error("Attendance status must be selected for all teachers");
+      return;
+    }
+
+    // Validation: Ensure date is selected
+    if (!date) {
+      toast.error("Please select a date");
+      return;
+    }
     //ACCESS TOKEN FROM LOCAL STORAGE
     const token = JSON.parse(localStorage.getItem("token"));
-    console.log(token, "TOKEN");
+    // console.log(token, "TOKEN ");
     //GETTING ALL THE INPUT FIELDS
     console.log("Selected Values:", statuses);
     console.log("date", date);
@@ -65,20 +89,22 @@ const Attendance = () => {
           },
         }
       );
-      console.log(res.data, "ATTENDANCE Submitted");
-      alert("Attendance Submitted");
+      // console.log(res.data, "ATTENDANCE Submitted");
+      toast.success("Attendance Submitted Successfully");
     } catch (error) {
       console.log(error, "ERROR");
     }
   };
-
+  //  Fetch attendance data
   useEffect(() => {
     getAttendance();
   }, []);
   return (
     <>
       <div className="">
-        <form onSubmit={submitAttendance}>
+      {/* // Loader component */}
+        {loading ? <Loader /> : null}
+        <form onSubmit={(e) => submitAttendance(e)}>
           <div className="row">
             <div className="col-sm-12 col-md-3 col-lg-3 col-12">
               <h1>Teacher Attendance</h1>
@@ -95,7 +121,7 @@ const Attendance = () => {
           </div>
 
           {attendance.map((e, i) => (
-            <div className="row">
+            <div key={i} className="row">
               <div className="col-sm-12 col-md-8 col-lg-8 col-12">
                 <div className="shadow rounded p-5 mt-3" key={i}>
                   <h1>
@@ -152,6 +178,18 @@ const Attendance = () => {
           </div>
         </form>
       </div>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
     </>
   );
 };

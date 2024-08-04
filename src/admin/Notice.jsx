@@ -1,5 +1,4 @@
 import * as React from "react";
-import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
@@ -10,33 +9,25 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
 import { baseURL } from "../api/api";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const defaultTheme = createTheme();
 export default function Notice() {
   //STATES FOR NOTICE
   const [date, setDate] = React.useState("");
   const [title, setTitle] = React.useState("");
   const [noticeDetails, setNoticeDetails] = React.useState("");
-  const [allNotice, setAllNotice] = React.useState([]);
-
-  //GET ALL NOTICES FUNCTION
-  const getAllNotices = async () => {
-    try {
-      const token = JSON.parse(localStorage.getItem("token"));
-      const res = await axios.get(`${baseURL}/api/v1/admin/notice`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      console.log(res.data, "NOTICES");
-      setAllNotice(res.data);
-    } catch (error) {
-      console.log("error ", error);
-    }
-  };
+  const [loading, setLoading] = React.useState(false);
 
   //NOTICE SUBMIT FUNCTION
   const noticeSubmit = async (event) => {
     event.preventDefault();
+
+    //ERROR VALIDATION
+    if (title === "" || noticeDetails === "" || date === "") {
+      toast.error("Please fill all the fields"); //TOASTIFY ERROR MESSAGE
+      return;
+    }
     const token = JSON.parse(localStorage.getItem("token"));
     console.log(token, "TOKEN");
     try {
@@ -53,45 +44,26 @@ export default function Notice() {
           },
         }
       );
+
+      //SET LOADING TO TRUE
+      setLoading(true);
       console.log(res.data, "NOTICE DATA");
     } catch (error) {
       console.log(error);
     }
+    toast.success("Notice Created Successfully"); //TOASTIFY SUCCESS MESSAGE
+    //SET LOADING TO FALSE AFTER 3 SECONDS
+    setTimeout(() => {
+      setLoading(false);
+    }, 3000);
+    setTitle("");
+    setNoticeDetails("");
+    setDate("");
   };
 
-  //USEEFFECT TO GET ALL NOTICES
-  React.useEffect(() => {
-    getAllNotices();
-  }, []);
+
   return (
     <>
-      <div>
-        <p>
-          <Button
-            variant="contained"
-            fullWidth
-            className="btn btn-primary"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#collapseExample"
-            aria-expanded="false"
-            aria-controls="collapseExample"
-          >
-            All Notices <ExpandMoreIcon />
-          </Button>
-        </p>
-        <div className="collapse" id="collapseExample">
-          {allNotice?.map((e,i)=>(
-            <div key={i} className="card card-body">
-                <h3><b>{e.title}</b></h3>
-                <p>{e.details}</p>
-                <p>Date: {e.date}</p>
-              </div>
-          )
-          )}
-        </div>
-      </div>
-
       <ThemeProvider theme={defaultTheme}>
         <Container component="main" maxWidth="xs">
           <CssBaseline />
@@ -152,13 +124,27 @@ export default function Notice() {
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
+                disabled={loading}
               >
-                Create Notice
+                {loading ? "Loading..." : "Create Notice"}
               </Button>
             </Box>
           </Box>
         </Container>
       </ThemeProvider>
+      {/* Toastify */}
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
     </>
   );
 }

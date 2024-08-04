@@ -4,6 +4,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import Container from "@mui/material/Container";
+import "react-toastify/dist/ReactToastify.css";
 import {
   createTheme,
   CssBaseline,
@@ -12,6 +13,7 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { baseURL } from "../api/api";
+import { toast, ToastContainer } from "react-toastify";
 const defaultTheme = createTheme();
 
 export default function BasicModal({ id, titles, detail, dates }) {
@@ -22,12 +24,19 @@ export default function BasicModal({ id, titles, detail, dates }) {
   const [title, setTitle] = React.useState(titles || "");
   const [noticeDetails, setNoticeDetails] = React.useState(detail || "");
   const [open, setOpen] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
   //HANDLE OPEN AND CLOSE MODAL
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   //Update Notice
   const updateNotice = async (event) => {
+    event.preventDefault();
+    //ERROR VALIDATION
+    if (title === "" || noticeDetails === "" || date === "") {
+      toast.error("Please fill all the fields"); //TOASTIFY ERROR MESSAGE
+      return;
+    }
     event.preventDefault();
     try {
       //Getting Token from Local Storage
@@ -46,10 +55,20 @@ export default function BasicModal({ id, titles, detail, dates }) {
           },
         }
       );
+      //SET LOADING TO TRUE
+      setLoading(true);
       console.log(res.data, "UPDATED NOTICE");
     } catch (error) {
       console.log("error ", error);
     }
+    toast.success("Notice Updated Successfully"); //TOASTIFY SUCCESS MESSAGE
+    //SET LOADING TO FALSE AFTER 3 SECONDS
+    setTimeout(() => {
+      setLoading(false);
+    }, 3000);
+    setTitle("");
+    setNoticeDetails("");
+    setDate("");
   };
   return (
     <>
@@ -128,14 +147,27 @@ export default function BasicModal({ id, titles, detail, dates }) {
                   fullWidth
                   variant="contained"
                   sx={{ mt: 3, mb: 2 }}
+                  disabled={loading}
                 >
-                  Update Notice
+                  {loading ? "Loading..." : "Update Notice"}
                 </Button>
               </Box>
             </Box>
           </Container>
         </ThemeProvider>
       </Modal>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
     </>
   );
 }
