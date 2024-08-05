@@ -6,6 +6,7 @@ const AdminHomePage = () => {
   return (
     <>
     <div className="container-fluid">
+      <h1>Admin Dashboard</h1>
       {/* First Row */}
 
       <div className="row">
@@ -51,41 +52,7 @@ const AdminHomePage = () => {
         </div>
       </div>
       
-      {/* Second Row */}
-      <div className="row">
-
-        {/* First Block */}
-        <div className="col-md-3 col">
-          <div className='text-center p-3 rounded mt-4 shadow border'>
-          <i style={{fontSize:"100px"}} className="fa-solid fa-clipboard-user"></i><br />
-          Attendance
-          </div>
-        </div>
-
-        {/* Second Block */}
-        <div className="col-md-3 col">
-          <div className='text-center p-3 rounded mt-4 shadow border'>
-          <i style={{fontSize:"100px"}} className="fa-solid fa-clipboard-user"></i><br />
-          Attendance
-          </div>
-        </div>
-
-        {/* Third Block */}
-        <div className="col-md-3 col">
-          <div className='text-center p-3 rounded mt-4 shadow border'>
-          <i style={{fontSize:"100px"}} className="fa-solid fa-clipboard-user"></i><br />
-          Attendance
-          </div>
-        </div>
-
-        {/* Fourth Block */}
-        <div className="col-md-3 col">
-          <div className='text-center p-3 rounded mt-4 shadow border'>
-          <i style={{fontSize:"100px"}} className="fa-solid fa-clipboard-user"></i><br />
-          Attendance
-          </div>
-        </div>
-      </div>
+      
     </div>
     </>
   )
