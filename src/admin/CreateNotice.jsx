@@ -12,7 +12,7 @@ import { baseURL } from "../api/api";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 const defaultTheme = createTheme();
-export default function Notice() {
+export default function CreateNotice() {
   //STATES FOR NOTICE
   const [date, setDate] = React.useState("");
   const [title, setTitle] = React.useState("");

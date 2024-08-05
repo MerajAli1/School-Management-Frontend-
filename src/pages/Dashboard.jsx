@@ -18,7 +18,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import AdminHomePage from "../admin/AdminHomePage";
 import Attendance from "../admin/Attendance";
-import Notice from "../admin/Notice";
+import CreateNotice from "../admin/CreateNotice";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
 import RegisterStudent from "../admin/RegisterStudent";
@@ -39,9 +39,9 @@ const routes = [
     element: <Attendance />,
   },
   {
-    name: "Notice",
-    path: "notice",
-    element: <Notice />,
+    name: "Create Notice",
+    path: "createnotice",
+    element: <CreateNotice />,
   },
  
   {
@@ -231,7 +231,7 @@ export default function Dashboard() {
         <Routes>
           <Route path="/adminHome" element={<AdminHomePage />} />
           <Route path="/attendance" element={<Attendance />} />
-          <Route path="/notice" element={<Notice />} />
+          <Route path="/createnotice" element={<CreateNotice />} />
           <Route path="/allNotice" element={<AllNotices />} />
           <Route path="/registerStudent" element={<RegisterStudent />} />
           <Route path="/registerTeacher" element={<RegisterTeacher />} />
