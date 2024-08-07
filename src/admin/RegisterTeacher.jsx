@@ -35,7 +35,6 @@ export default function SignUp() {
   const [section, setSection] = useState("");
   const [teachClass, setTeachClass] = useState("");
 
-  
   /* teachSubject:[
     {
       subName: "English",
@@ -55,6 +54,7 @@ export default function SignUp() {
   //Register Teacher Function
   const registerTeacher = async (event) => {
     event.preventDefault();
+    const token = JSON.parse(localStorage.getItem("token"));
     const obj = [
       {
         subName,
@@ -66,6 +66,30 @@ export default function SignUp() {
         ],
       },
     ];
+    try {
+      const res = await axios.post(
+        `${baseURL}/api/v1/admin/teacherReg`,
+        {
+          name,
+          sClass: classes,
+          gender,
+          section: sectionVal,
+          qualification,
+          salary,
+          email,
+          password,
+          teachSubject: obj,
+          role: "Teacher",
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(res.data, "RES");
+    } catch (error) {}
+
     console.log(obj, "Obj");
 
     // try {
@@ -134,16 +158,16 @@ export default function SignUp() {
                   <option value="" disabled>
                     Class*
                   </option>
-                  <option value="one">One</option>
-                  <option value="two">Two</option>
-                  <option value="three">Three</option>
-                  <option value="four">Four</option>
-                  <option value="five">Five</option>
-                  <option value="six">Six</option>
-                  <option value="seven">Seven</option>
-                  <option value="eight">Eight</option>
-                  <option value="nine">Nine</option>
-                  <option value="ten">Ten</option>
+                  <option value="One">One</option>
+                  <option value="Two">Two</option>
+                  <option value="Three">Three</option>
+                  <option value="Four">Four</option>
+                  <option value="Five">Five</option>
+                  <option value="Six">Six</option>
+                  <option value="Seven">Seven</option>
+                  <option value="Eight">Eight</option>
+                  <option value="Nine">Nine</option>
+                  <option value="Ten">Ten</option>
                 </select>
               </Grid>
               {/* Gender Select Field */}
@@ -156,8 +180,8 @@ export default function SignUp() {
                   <option value="" disabled>
                     Gender
                   </option>
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
                 </select>
               </Grid>
 

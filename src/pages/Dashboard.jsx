@@ -24,6 +24,7 @@ import { Button } from "@mui/material";
 import RegisterStudent from "../admin/RegisterStudent";
 import RegisterTeacher from "../admin/RegisterTeacher";
 import AllNotices from "../admin/AllNotices";
+import AllStudents from "../admin/AllStudents";
 
 const drawerWidth = 240;
 // Routes for the admin dashboard
@@ -43,7 +44,7 @@ const routes = [
     path: "createnotice",
     element: <CreateNotice />,
   },
- 
+
   {
     name: "Register Student",
     path: "registerStudent",
@@ -58,7 +59,12 @@ const routes = [
     name: "All Notices",
     path: "allNotice",
     element: <AllNotices />,
-  }
+  },
+  {
+    name: "All Students",
+    path: "allStudents",
+    element: <AllStudents />,
+  },
 ];
 // Styling for the admin dashboard
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
@@ -191,7 +197,7 @@ export default function Dashboard() {
                   {index === 3 && (
                     <i
                       style={{ fontSize: "25px" }}
-                      className="fa-solid fa-id-card"
+                      className="fa-solid fa-user-plus"
                     ></i>
                   )}
                   {index === 4 && (
@@ -201,10 +207,16 @@ export default function Dashboard() {
                     ></i>
                   )}
                   {index === 5 && (
-                   <i
-                   style={{ fontSize: "25px" }}
-                   className="fa-regular fa-clipboard"
-                 ></i>
+                    <i
+                      style={{ fontSize: "25px" }}
+                      className="fa-regular fa-clipboard"
+                    ></i>
+                  )}
+                  {index === 6 && (
+                    <i
+                      style={{ fontSize: "25px" }}
+                      className="fa-solid fa-id-card"
+                    ></i>
                   )}
                 </ListItemIcon>
                 <ListItemText primary={route.name} />
@@ -233,6 +245,7 @@ export default function Dashboard() {
           <Route path="/attendance" element={<Attendance />} />
           <Route path="/createnotice" element={<CreateNotice />} />
           <Route path="/allNotice" element={<AllNotices />} />
+          <Route path="/allStudents" element={<AllStudents />} />
           <Route path="/registerStudent" element={<RegisterStudent />} />
           <Route path="/registerTeacher" element={<RegisterTeacher />} />
         </Routes>

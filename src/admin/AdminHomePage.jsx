@@ -53,7 +53,7 @@ const AdminHomePage = () => {
             <div className="text-center p-3 rounded mt-4 shadow border">
               <i
                 style={{ fontSize: "100px" }}
-                className="fa-solid fa-id-card"
+                className="fa-solid fa-user-plus"
               ></i>
               <br />
               Register Student
@@ -93,6 +93,22 @@ const AdminHomePage = () => {
               ></i>
               <br />
               All Notices
+            </div>
+          </div>
+          {/* Second Block */}
+          <div
+            onClick={() => {
+              navigate("/dashboard/allStudents");
+            }}
+            className="col-md-3 col"
+          >
+            <div className="text-center p-3 rounded mt-4 shadow border">
+              <i
+                style={{ fontSize: "100px" }}
+                className="fa-solid fa-id-card"
+              ></i>
+              <br />
+              All Students
             </div>
           </div>
         </div>
