@@ -58,8 +58,9 @@ const AllStudents = () => {
           <tr>
             <th>Sno.</th>
             <th>Name</th>
-            <th>Rollno.</th>
+            <th>Student ID</th>
             <th>Class</th>
+            <th>Password</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -70,8 +71,9 @@ const AllStudents = () => {
               <tr key={i}>
                 <th>{i + 1}</th>
                 <td>{e.studentName}</td>
-                <td>{e.rollNo}</td>
+                <td>{e.studentId}</td>
                 <td>{e.sClass}</td>
+                <td>{e.password}</td>
                 <td>
                   <Button
                     variant="contained"
