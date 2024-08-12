@@ -29,7 +29,7 @@ const AdminHomePage = () => {
           {/* Second Block */}
           <div
             onClick={() => {
-              navigate("/dashboard/notice");
+              navigate("/dashboard/createnotice");
             }}
             className="col-md-3 col"
           >

@@ -2,38 +2,55 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { baseURL } from "../api/api";
+import { toast, ToastContainer } from "react-toastify";
 
 const Signup = () => {
+  // UseNavigate hook to navigate to different pages
   const navigate = useNavigate();
+  // State to store form data
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [schoolName, setSchoolName] = useState("");
+  // State for loading
+  const [loading, setLoading] = useState(false);
+  // Function to register admin
   const adminRegister = async (e) => {
     e.preventDefault();
+    if (!email || !password || !name || !schoolName) {
+      toast.error("Please fill all the fields");
+      return;
+    }
     try {
-      const res = await axios.post(
-        `${baseURL}/adminRegister`,
-        {
-          email,
-          password,
-          name,
-          schoolName,
-        }
-      );
+      setLoading(true);
+      const res = await axios.post(`${baseURL}/adminRegister`, {
+        email,
+        password,
+        name,
+        schoolName,
+      });
       console.log(res, "RES");
       if (res.status === 200) {
         const token = res.data.token;
         const loginToken = localStorage.setItem("token", JSON.stringify(token));
         console.log(token, "LOGIN TOKEN");
-        navigate("/dashboard/adminHome");
+        toast.success("Registered Successfully");
+        setTimeout(() => {
+          setLoading(false);
+          navigate("/dashboard/adminHome");
+        }, 3000);
       } else {
         navigate("/signup");
       }
+
       // console.log(res.data.err.message, "ERROR MESSAGE");
     } catch (error) {
       console.log(error, "ERROR OCCURED");
     }
+    setEmail("");
+    setPassword("");
+    setName("");
+    setSchoolName("");
   };
   return (
     <>
@@ -130,8 +147,9 @@ const Signup = () => {
                     data-mdb-ripple-init
                     className="btn btn-primary btn-block mb-4"
                     onClick={adminRegister}
+                    disabled={loading}
                   >
-                    Sign up
+                    {loading ? "Loading..." : "Sign up"}
                   </button>
 
                   {/* <!-- Register buttons --> */}
@@ -149,6 +167,20 @@ const Signup = () => {
         </div>
       </section>
       {/* <!-- Section: Design Block --> */}
+
+      {/* Toastify */}
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
     </>
   );
 };
