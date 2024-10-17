@@ -25,6 +25,8 @@ import RegisterStudent from "../admin/RegisterStudent";
 import RegisterTeacher from "../admin/RegisterTeacher";
 import AllNotices from "../admin/AllNotices";
 import AllStudents from "../admin/AllStudents";
+import { jwtDecode } from "jwt-decode";
+import AdminProfile from "../admin/AdminProfile";
 
 const drawerWidth = 240;
 // Routes for the admin dashboard
@@ -66,6 +68,14 @@ const routes = [
     element: <AllStudents />,
   },
 ];
+// Routes for the admin Profile 
+const profileRoutes=[
+  {
+    name: "Profile",
+    path: "adminProfile",
+    element: <AdminProfile />,
+  },
+]
 // Styling for the admin dashboard
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
   ({ theme, open }) => ({
@@ -116,7 +126,10 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 export default function Dashboard() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
-
+  const token = JSON.parse(localStorage.getItem("token"));
+  // console.log(token);
+  const decoded = jwtDecode(token);
+  console.log("decoded: ", decoded);
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -149,6 +162,7 @@ export default function Dashboard() {
       </AppBar>
       <Drawer
         sx={{
+          color: "red",
           width: drawerWidth,
           flexShrink: 0,
           "& .MuiDrawer-paper": {
@@ -223,6 +237,26 @@ export default function Dashboard() {
               </ListItemButton>
             </ListItem>
           ))}
+          <Divider />
+          <Divider />
+          <Divider />
+          <Divider />
+          <Divider />
+          {profileRoutes.map((route, index) => (
+            <ListItem key={index} disablePadding>
+              <ListItemButton onClick={() => navigateHandler(route.path)}>
+                <ListItemIcon>
+                  {index === 0 && (
+                    <i
+                      style={{ fontSize: "25px" }}
+                      className="fa-solid fa-user"
+                    ></i>
+                  )}
+                </ListItemIcon>
+                <ListItemText primary={route.name} />
+              </ListItemButton>
+            </ListItem>
+          ))}
           {/* //Logout button */}
           <Button
             sx={{ margin: "auto", display: "block", marginTop: "20px" }}
@@ -248,6 +282,7 @@ export default function Dashboard() {
           <Route path="/allStudents" element={<AllStudents />} />
           <Route path="/registerStudent" element={<RegisterStudent />} />
           <Route path="/registerTeacher" element={<RegisterTeacher />} />
+          <Route path="/adminProfile" element={<AdminProfile />} />
         </Routes>
       </Main>
     </Box>
