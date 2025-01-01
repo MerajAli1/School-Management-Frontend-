@@ -11,7 +11,9 @@ import axios from "axios";
 import { baseURL } from "../api/api";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
 const defaultTheme = createTheme();
+
 export default function CreateNotice() {
   //STATES FOR NOTICE
   const [date, setDate] = React.useState("");
@@ -28,6 +30,7 @@ export default function CreateNotice() {
       toast.error("Please fill all the fields"); //TOASTIFY ERROR MESSAGE
       return;
     }
+    setLoading(true);
     const token = JSON.parse(localStorage.getItem("token"));
     console.log(token, "TOKEN");
     try {
@@ -45,28 +48,30 @@ export default function CreateNotice() {
         }
       );
 
-      //SET LOADING TO TRUE
-      setLoading(true);
+      if (res.data.msg === "success") {
+        toast.success("Notice Created Successfully"); //TOASTIFY SUCCESS MESSAGE
+        // Reset all fields
+        setTitle("");
+        setNoticeDetails("");
+        setDate("");
+      } else {
+        toast.error("Error creating notice. Please try again.");
+      }
       console.log(res.data, "NOTICE DATA");
     } catch (error) {
+      toast.error("Error creating notice. Please try again.");
       console.log(error);
-    }
-    toast.success("Notice Created Successfully"); //TOASTIFY SUCCESS MESSAGE
-    //SET LOADING TO FALSE AFTER 3 SECONDS
-    setTimeout(() => {
+    } finally {
       setLoading(false);
-    }, 3000);
-    setTitle("");
-    setNoticeDetails("");
-    setDate("");
+    }
   };
-
 
   return (
     <>
       <ThemeProvider theme={defaultTheme}>
         <Container component="main" maxWidth="xs">
           <CssBaseline />
+          <ToastContainer />
           <Box
             sx={{
               marginTop: 8,
@@ -90,6 +95,7 @@ export default function CreateNotice() {
             >
               <TextField
                 onChange={(e) => setTitle(e.target.value)}
+                value={title}
                 margin="normal"
                 required
                 fullWidth
@@ -102,6 +108,7 @@ export default function CreateNotice() {
 
               <textarea
                 onChange={(e) => setNoticeDetails(e.target.value)}
+                value={noticeDetails}
                 className="rounded p-2"
                 style={{ borderColor: "lightgrey" }}
                 rows="4"
@@ -113,6 +120,7 @@ export default function CreateNotice() {
               <div>
                 <TextField
                   onChange={(e) => setDate(e.target.value)}
+                  value={date}
                   type="date"
                   id="date"
                   name="date"
@@ -132,19 +140,6 @@ export default function CreateNotice() {
           </Box>
         </Container>
       </ThemeProvider>
-      {/* Toastify */}
-      <ToastContainer
-        position="top-center"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="colored"
-      />
     </>
   );
 }

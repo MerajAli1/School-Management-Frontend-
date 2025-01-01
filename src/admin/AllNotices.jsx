@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { baseURL } from "../api/api";
 import axios from "axios";
-import { Button, CircularProgress } from "@mui/material";
+import { Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
 import NoticeUpdateModal from "./NoticeUpdateModal";
 import Loader from "../Loader/Loader";
 import { toast, ToastContainer } from "react-toastify";
@@ -11,7 +11,10 @@ const AllNotices = () => {
   const [allNotice, setAllNotice] = useState([]);
   const [refresh, setRefresh] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState({});
+  const [openDialog, setOpenDialog] = useState(false);
+  const [noticeToDelete, setNoticeToDelete] = useState(null);
+
   //GET ALL NOTICES FUNCTION
   const getAllNotices = async () => {
     setLoading(true);
@@ -22,7 +25,6 @@ const AllNotices = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log(res.data, "NOTICES");
       setAllNotice(res.data);
     } catch (error) {
       console.log("error ", error);
@@ -40,21 +42,38 @@ const AllNotices = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log(res.data);
+      toast.success("Notice Deleted Successfully");
+      setRefresh(!refresh);
     } catch (error) {
       toast.error("Error Deleting Notice");
       console.log("error ", error);
     } finally {
       setDeleteLoading((prev) => ({ ...prev, [id]: false }));
     }
-    toast.success("Notice Deleted Successfully");
-    setRefresh(!refresh);
+  };
+
+  const handleDeleteClick = (id) => {
+    setNoticeToDelete(id);
+    setOpenDialog(true);
+  };
+
+  const handleDialogClose = () => {
+    setOpenDialog(false);
+    setNoticeToDelete(null);
+  };
+
+  const handleDialogConfirm = () => {
+    if (noticeToDelete) {
+      deleteNotice(noticeToDelete);
+    }
+    handleDialogClose();
   };
 
   //USEEFFECT TO GET ALL NOTICES
   useEffect(() => {
     getAllNotices();
   }, [refresh]);
+
   return (
     <>
       <div className="container-fluid">
@@ -62,7 +81,6 @@ const AllNotices = () => {
           <h1>All Notices</h1>
         </div>
         <div className="row">
-          {/* //Mapping through all the notices */}
           {loading ? <Loader /> : null}
           {allNotice?.map((e, i) => (
             <div className="card mt-5" key={i}>
@@ -75,9 +93,6 @@ const AllNotices = () => {
               <div className="card-body">
                 <h5 className="card-title">{e.title}</h5>
                 <p className="card-text">{e.details}</p>
-                {/* <Button className="me-3" variant="contained">
-                    update
-                </Button> */}
                 <NoticeUpdateModal
                   id={e._id}
                   titles={e.title}
@@ -85,9 +100,9 @@ const AllNotices = () => {
                   dates={e.date}
                 />
                 <Button
-                  onClick={() => deleteNotice(e._id)}
+                  onClick={() => handleDeleteClick(e._id)}
                   color={"error"}
-                  sx={{mt: 2}}
+                  sx={{ mt: 2 }}
                   variant="contained"
                   disabled={deleteLoading[e._id]}
                 >
@@ -102,6 +117,25 @@ const AllNotices = () => {
           ))}
         </div>
       </div>
+      <Dialog
+        open={openDialog}
+        onClose={handleDialogClose}
+      >
+        <DialogTitle>{"Confirm Delete"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to delete this notice?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDialogClose} color="primary">
+            No
+          </Button>
+          <Button onClick={handleDialogConfirm} color="primary" autoFocus>
+            Yes
+          </Button>
+        </DialogActions>
+      </Dialog>
       <ToastContainer
         position="top-center"
         autoClose={5000}
