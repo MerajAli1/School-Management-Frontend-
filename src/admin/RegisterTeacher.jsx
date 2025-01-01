@@ -8,17 +8,15 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { useEffect, useState } from "react";
-import ModalForTeacherRegister from "./ModalForTeacherRegister";
+import { useState } from "react";
 import axios from "axios";
 import { baseURL } from "../api/api";
-// TODO remove, this demo shouldn't need to reset the theme.
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const defaultTheme = createTheme();
 
 export default function SignUp() {
-  // State for Add Button
-  const [add, setAdd] = useState(false);
   //States for input fields
   const [name, setName] = useState("");
   const [classes, setClasses] = useState("");
@@ -28,44 +26,35 @@ export default function SignUp() {
   const [salary, setSalary] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  //States for Teach Subject
-  const [teachSubject, setTeachSubject] = useState([]);
-  const [subName, setSubName] = useState("");
-  const [section, setSection] = useState("");
-  const [teachClass, setTeachClass] = useState("");
-
-  /* teachSubject:[
-    {
-      subName: "English",
-      classes: [
-        {
-          class: "one",
-          section: "A",
-        },
-        {
-          class: "Ten",
-          section: "C",
-        },
-      ],
-    },
-  ];*/
+  const [loading, setLoading] = useState(false);
 
   //Register Teacher Function
   const registerTeacher = async (event) => {
     event.preventDefault();
+    if (
+      !name ||
+      !classes ||
+      !gender ||
+      !sectionVal ||
+      !qualification ||
+      !salary ||
+      !email ||
+      !password
+    ) {
+      toast.error("Fill all the fields!", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+      return;
+    }
+    setLoading(true);
     const token = JSON.parse(localStorage.getItem("token"));
-    const obj = [
-      {
-        subName,
-        classes: [
-          {
-            class: teachClass,
-            section,
-          },
-        ],
-      },
-    ];
     try {
       const res = await axios.post(
         `${baseURL}/api/v1/admin/teacherReg`,
@@ -78,8 +67,6 @@ export default function SignUp() {
           salary,
           email,
           password,
-          teachSubject: obj,
-          role: "Teacher",
         },
         {
           headers: {
@@ -87,31 +74,34 @@ export default function SignUp() {
           },
         }
       );
+      if (res.data.msg === "Teacher Registered Successfully") {
+        toast.success("Teacher registered successfully!");
+        // Reset all fields
+        setName("");
+        setClasses("");
+        setGender("");
+        setSectionVal("");
+        setQualification("");
+        setSalary("");
+        setEmail("");
+        setPassword("");
+      } else {
+        toast.error("Error registering teacher. Please try again.");
+      }
       console.log(res.data, "RES");
-    } catch (error) {}
-
-    console.log(obj, "Obj");
-
-    // try {
-    //   const res = await axios.post(`${baseURL}/api/v1/admin/teacherReg`, {
-    //     name,
-    //     sClass: classes,
-    //     gender,
-    //     section: sectionVal,
-    //     qualification,
-    //     salary,
-    //     email,
-    //     password,
-    //     role: "Teacher",
-    //   });
-    // } catch (error) {
-    //   console.log(error, "Error");
-    // }
+    } catch (error) {
+      toast.error("Error registering teacher. Please try again.");
+      console.log(error, "Error");
+    } finally {
+      setLoading(false);
+    }
   };
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
+        <ToastContainer />
         <Box
           sx={{
             marginTop: 8,
@@ -137,6 +127,7 @@ export default function SignUp() {
               <Grid item xs={12} sm={12}>
                 <TextField
                   onChange={(e) => setName(e.target.value)}
+                  value={name}
                   autoComplete="given-name"
                   name="Name"
                   required
@@ -203,76 +194,11 @@ export default function SignUp() {
                   <option value="E">E</option>
                 </select>
               </Grid>
-
-              {/* Teach Subject Section */}
-              <Grid item xs={12}>
-                <TextField
-                  onChange={(e) => setSubName(e.target.value)}
-                  required
-                  id="subName"
-                  label="Subject Name"
-                  name="subName"
-                />
-                <Button
-                  onClick={() => setAdd(true)}
-                  sx={{ ml: 2, p: 2 }}
-                  variant="contained"
-                >
-                  ADD
-                </Button>
-              </Grid>
-
-              {/* //ADD Button Condition */}
-              {add ? (
-                <>
-                  {/* Section Select Field */}
-                  <Grid item xs={12} sm={6}>
-                    <select
-                      value={section}
-                      onChange={(e) => setSection(e.target.value)}
-                      required
-                      className="form-select"
-                    >
-                      <option value="" disabled>
-                        Section*
-                      </option>
-                      <option value="A">A</option>
-                      <option value="B">B</option>
-                      <option value="C">C</option>
-                      <option value="D">D</option>
-                      <option value="E">E</option>
-                    </select>
-                  </Grid>
-                  {/* Class Select Field */}
-                  <Grid item xs={12} sm={6}>
-                    <select
-                      onChange={(e) => setTeachClass(e.target.value)}
-                      required
-                      value={teachClass}
-                      className="form-select"
-                    >
-                      <option value="" disabled>
-                        Class*
-                      </option>
-                      <option value="one">One</option>
-                      <option value="two">Two</option>
-                      <option value="three">Three</option>
-                      <option value="four">Four</option>
-                      <option value="five">Five</option>
-                      <option value="six">Six</option>
-                      <option value="seven">Seven</option>
-                      <option value="eight">Eight</option>
-                      <option value="nine">Nine</option>
-                      <option value="ten">Ten</option>
-                    </select>
-                  </Grid>
-                </>
-              ) : null}
-
               {/* Qualification Input Field */}
               <Grid item xs={12}>
                 <TextField
                   onChange={(e) => setQualification(e.target.value)}
+                  value={qualification}
                   required
                   fullWidth
                   id="qualification"
@@ -285,6 +211,7 @@ export default function SignUp() {
               <Grid item xs={12}>
                 <TextField
                   onChange={(e) => setSalary(e.target.value)}
+                  value={salary}
                   required
                   fullWidth
                   id="salary"
@@ -297,6 +224,7 @@ export default function SignUp() {
               <Grid item xs={12}>
                 <TextField
                   onChange={(e) => setEmail(e.target.value)}
+                  value={email}
                   required
                   fullWidth
                   id="email"
@@ -310,6 +238,7 @@ export default function SignUp() {
               <Grid item xs={12}>
                 <TextField
                   onChange={(e) => setPassword(e.target.value)}
+                  value={password}
                   required
                   fullWidth
                   name="password"
@@ -327,8 +256,9 @@ export default function SignUp() {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              disabled={loading}
             >
-              Register
+              {loading ? "Registering..." : "Register"}
             </Button>
           </Box>
         </Box>

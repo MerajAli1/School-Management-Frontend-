@@ -101,6 +101,8 @@ const Login = () => {
   // Admin,Student,Teacher Login Function
   const login = async (e) => {
     e.preventDefault();
+    // ERROR HANDLING
+    errorHandling();
     // FOR ADMIN LOGIN
     if (role === "Admin") {
       try {
@@ -113,8 +115,7 @@ const Login = () => {
           "token",
           JSON.stringify(res.data.token)
         );
-        // ERROR HANDLING
-        errorHandling();
+
         //Setting response msg for validation in errorHandling function
         setResponse(res.data.msg);
         console.log(res.data.token);
@@ -125,8 +126,18 @@ const Login = () => {
           setTimeout(() => navigate("/dashboard/adminHome"), 5000);
         }
       } catch (error) {
+        toast.error("Something went wrong", {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
         console.log("error", error);
-      } 
+      }
     }
     // FOR STUDENT LOGIN
     else if (role === "Student") {
