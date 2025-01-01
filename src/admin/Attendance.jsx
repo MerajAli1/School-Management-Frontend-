@@ -91,6 +91,9 @@ const Attendance = () => {
       );
       // console.log(res.data, "ATTENDANCE Submitted");
       toast.success("Attendance Submitted Successfully");
+      // Reset all fields
+      setStatuses([]);
+      setDate("");
     } catch (error) {
       console.log(error, "ERROR");
     }
