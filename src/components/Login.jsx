@@ -111,11 +111,7 @@ const Login = () => {
           password,
         });
         // Setting token in local storage
-        const token = localStorage.setItem(
-          "token",
-          JSON.stringify(res.data.token)
-        );
-
+        localStorage.setItem("token", JSON.stringify(res.data.token));
         //Setting response msg for validation in errorHandling function
         setResponse(res.data.msg);
         console.log(res.data.token);
@@ -124,6 +120,17 @@ const Login = () => {
           setLoading(true); //Loading Spinner
           notifySuccess(); //Toastify Success Notification
           setTimeout(() => navigate("/dashboard/adminHome"), 5000);
+        } else {
+          toast.error("Wrong Credentials", {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
         }
       } catch (error) {
         toast.error("Something went wrong", {
@@ -141,32 +148,82 @@ const Login = () => {
     }
     // FOR STUDENT LOGIN
     else if (role === "Student") {
-      const res = await axios.post(`${baseURL}/studentLogin`, {
-        email,
-        password,
-      });
-      const token = localStorage.setItem(
-        "token",
-        JSON.stringify(res.data.token)
-      );
-      console.log(res.data.token);
-      if (res.data.token) {
-        navigate("/dashboard/adminHome");
+      try {
+        const res = await axios.post(`${baseURL}/studentLogin`, {
+          studentId:email,
+          password,
+        });
+        localStorage.setItem("token", JSON.stringify(res.data.token));
+        setResponse(res.data.msg);
+        console.log(res.data.token);
+        if (res.data.token) {
+          setLoading(true);
+          notifySuccess();
+          setTimeout(() => navigate("/dashboard/studentHome"), 5000);
+        } else {
+          toast.error("Wrong Credentials", {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
+        }
+      } catch (error) {
+        toast.error("Something went wrong", {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+        console.log("error", error);
       }
     }
     // FOR TEACHER LOGIN
     else if (role === "Teacher") {
-      const res = await axios.post(`${baseURL}/teacherLogin`, {
-        email,
-        password,
-      });
-      const token = localStorage.setItem(
-        "token",
-        JSON.stringify(res.data.token)
-      );
-      console.log(res.data.token);
-      if (res.data.token) {
-        navigate("/dashboard/adminHome");
+      try {
+        const res = await axios.post(`${baseURL}/teacherLogin`, {
+          email,
+          password,
+        });
+        localStorage.setItem("token", JSON.stringify(res.data.token));
+        setResponse(res.data.msg);
+        console.log(res.data.token);
+        if (res.data.token) {
+          setLoading(true);
+          notifySuccess();
+          setTimeout(() => navigate("/dashboard/teacherHome"), 5000);
+        } else {
+          toast.error("Wrong Credentials", {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
+        }
+      } catch (error) {
+        toast.error("Something went wrong", {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+        console.log("error", error);
       }
     } else {
       navigate("/");

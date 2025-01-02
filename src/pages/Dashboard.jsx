@@ -27,55 +27,96 @@ import AllNotices from "../admin/AllNotices";
 import AllStudents from "../admin/AllStudents";
 import { jwtDecode } from "jwt-decode";
 import AdminProfile from "../admin/AdminProfile";
+import TeacherHomePage from "../teacher/TeacherHomePage";
+import StudentHomePage from "../student/StudentHomePage";
 
 const drawerWidth = 240;
+
 // Routes for the admin dashboard
 const routes = [
   {
     name: "Home",
     path: "adminHome",
     element: <AdminHomePage />,
+    icon: <i style={{ fontSize: "25px" }} className="fa-solid fa-house"></i>,
   },
   {
     name: "Teacher Attendance",
     path: "attendance",
     element: <Attendance />,
+    icon: (
+      <i style={{ fontSize: "25px" }} className="fa-solid fa-clipboard-user"></i>
+    ),
   },
   {
     name: "Create Notice",
     path: "createnotice",
     element: <CreateNotice />,
+    icon: (
+      <i style={{ fontSize: "25px" }} className="fa-regular fa-clipboard"></i>
+    ),
   },
-
   {
     name: "Register Student",
     path: "registerStudent",
     element: <RegisterStudent />,
+    icon: (
+      <i style={{ fontSize: "25px" }} className="fa-solid fa-user-plus"></i>
+    ),
   },
   {
     name: "Register Teacher",
     path: "registerTeacher",
     element: <RegisterTeacher />,
+    icon: (
+      <i style={{ fontSize: "25px" }} className="fa-solid fa-chalkboard-user"></i>
+    ),
   },
   {
     name: "All Notices",
     path: "allNotice",
     element: <AllNotices />,
+    icon: (
+      <i style={{ fontSize: "25px" }} className="fa-regular fa-clipboard"></i>
+    ),
   },
   {
     name: "All Students",
     path: "allStudents",
     element: <AllStudents />,
+    icon: <i style={{ fontSize: "25px" }} className="fa-solid fa-id-card"></i>,
   },
 ];
-// Routes for the admin Profile 
-const profileRoutes=[
+
+// Routes for the admin Profile
+const profileRoutes = [
   {
     name: "Profile",
     path: "adminProfile",
     element: <AdminProfile />,
   },
-]
+];
+
+// Routes for the Teacher Dashboard
+const teacherRoutes = [
+  {
+    name: "Home",
+    path: "teacherHome",
+    element: <TeacherHomePage />,
+    icon: <i style={{ fontSize: "25px" }} className="fa-solid fa-house"></i>,
+  },
+];
+
+// Routes for the Student Dashboard
+const studentRoutes = [
+  {
+    name: "Home",
+    path: "studentHome",
+    element: <StudentHomePage />,
+    icon: <i style={{ fontSize: "25px" }} className="fa-solid fa-house"></i>,
+  },
+];
+
 // Styling for the admin dashboard
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
   ({ theme, open }) => ({
@@ -113,6 +154,7 @@ const AppBar = styled(MuiAppBar, {
     }),
   }),
 }));
+
 // Styling for the admin dashboard
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
@@ -127,9 +169,9 @@ export default function Dashboard() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const token = JSON.parse(localStorage.getItem("token"));
-  // console.log(token);
   const decoded = jwtDecode(token);
   console.log("decoded: ", decoded);
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -137,10 +179,12 @@ export default function Dashboard() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
   const navigate = useNavigate();
   const navigateHandler = (path) => {
     navigate(path);
   };
+
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -156,7 +200,7 @@ export default function Dashboard() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            Admin Dashboard
+            {decoded.role} Dashboard
           </Typography>
         </Toolbar>
       </AppBar>
@@ -185,79 +229,38 @@ export default function Dashboard() {
         </DrawerHeader>
         <Divider />
         <List>
-          {/* //Mapping the routes for the admin dashboard */}
-          {routes.map((route, index) => (
+          {/* Mapping the routes based on the user's role */}
+          {(decoded.role === "ADMIN"
+            ? routes
+            : decoded.role === "Teacher"
+            ? teacherRoutes
+            : studentRoutes
+          ).map((route, index) => (
             <ListItem key={index} disablePadding>
               <ListItemButton onClick={() => navigateHandler(route.path)}>
-                <ListItemIcon>
-                  {index === 0 && (
-                    <i
-                      style={{ fontSize: "25px" }}
-                      className="fa-solid fa-house"
-                    ></i>
-                  )}
-                  {index === 1 && (
-                    <i
-                      style={{ fontSize: "25px" }}
-                      className="fa-solid fa-clipboard-user"
-                    ></i>
-                  )}
-                  {index === 2 && (
-                    <i
-                      style={{ fontSize: "25px" }}
-                      className="fa-regular fa-clipboard"
-                    ></i>
-                  )}
-                  {index === 3 && (
-                    <i
-                      style={{ fontSize: "25px" }}
-                      className="fa-solid fa-user-plus"
-                    ></i>
-                  )}
-                  {index === 4 && (
-                    <i
-                      style={{ fontSize: "25px" }}
-                      className="fa-solid fa-chalkboard-user"
-                    ></i>
-                  )}
-                  {index === 5 && (
-                    <i
-                      style={{ fontSize: "25px" }}
-                      className="fa-regular fa-clipboard"
-                    ></i>
-                  )}
-                  {index === 6 && (
-                    <i
-                      style={{ fontSize: "25px" }}
-                      className="fa-solid fa-id-card"
-                    ></i>
-                  )}
-                </ListItemIcon>
+                <ListItemIcon>{route.icon}</ListItemIcon>
                 <ListItemText primary={route.name} />
               </ListItemButton>
             </ListItem>
           ))}
           <Divider />
-          <Divider />
-          <Divider />
-          <Divider />
-          <Divider />
-          {profileRoutes.map((route, index) => (
-            <ListItem key={index} disablePadding>
-              <ListItemButton onClick={() => navigateHandler(route.path)}>
-                <ListItemIcon>
-                  {index === 0 && (
-                    <i
-                      style={{ fontSize: "25px" }}
-                      className="fa-solid fa-user"
-                    ></i>
-                  )}
-                </ListItemIcon>
-                <ListItemText primary={route.name} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-          {/* //Logout button */}
+          {decoded.role === "admin" &&
+            profileRoutes.map((route, index) => (
+              <ListItem key={index} disablePadding>
+                <ListItemButton onClick={() => navigateHandler(route.path)}>
+                  <ListItemIcon>
+                    {index === 0 && (
+                      <i
+                        style={{ fontSize: "25px" }}
+                        className="fa-solid fa-user"
+                      ></i>
+                    )}
+                  </ListItemIcon>
+                  <ListItemText primary={route.name} />
+                </ListItemButton>
+              </ListItem>
+            ))}
+          {/* Logout button */}
           <Button
             sx={{ margin: "auto", display: "block", marginTop: "20px" }}
             onClick={() => {
@@ -273,16 +276,20 @@ export default function Dashboard() {
       </Drawer>
       <Main open={open}>
         <DrawerHeader />
-        {/* // Routes for the admin dashboard */}
+        {/* Routes based on the user's role */}
         <Routes>
-          <Route path="/adminHome" element={<AdminHomePage />} />
-          <Route path="/attendance" element={<Attendance />} />
-          <Route path="/createnotice" element={<CreateNotice />} />
-          <Route path="/allNotice" element={<AllNotices />} />
-          <Route path="/allStudents" element={<AllStudents />} />
-          <Route path="/registerStudent" element={<RegisterStudent />} />
-          <Route path="/registerTeacher" element={<RegisterTeacher />} />
-          <Route path="/adminProfile" element={<AdminProfile />} />
+          {(decoded.role === "ADMIN"
+            ? routes
+            : decoded.role === "Teacher"
+            ? teacherRoutes
+            : studentRoutes
+          ).map((route, index) => (
+            <Route key={index} path={route.path} element={route.element} />
+          ))}
+          {decoded.role === "ADMIN" &&
+            profileRoutes.map((route, index) => (
+              <Route key={index} path={route.path} element={route.element} />
+            ))}
         </Routes>
       </Main>
     </Box>
