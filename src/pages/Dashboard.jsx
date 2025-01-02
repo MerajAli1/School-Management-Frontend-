@@ -29,6 +29,8 @@ import { jwtDecode } from "jwt-decode";
 import AdminProfile from "../admin/AdminProfile";
 import TeacherHomePage from "../teacher/TeacherHomePage";
 import StudentHomePage from "../student/StudentHomePage";
+import StudentAttendanceReport from "../student/StudentAttendanceReport";
+import StudentAllNotices from "../student/StudentAllNotices";
 
 const drawerWidth = 240;
 
@@ -115,6 +117,19 @@ const studentRoutes = [
     element: <StudentHomePage />,
     icon: <i style={{ fontSize: "25px" }} className="fa-solid fa-house"></i>,
   },
+  {
+    name: "Attendance Report",
+    path: "studentAttendanceReport",
+    element: <StudentAttendanceReport />,
+    icon: <i style={{ fontSize: "25px" }} className="fa-solid fa-clipboard-user"></i>,
+  },
+  {
+    name: "Notices",
+    path: "allNotices",
+    element: <StudentAllNotices/>,
+    icon: <i style={{ fontSize: "25px" }} className="fa-regular fa-clipboard"></i>,
+  },
+
 ];
 
 // Styling for the admin dashboard
