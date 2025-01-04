@@ -44,6 +44,22 @@ const TeacherHomePage = () => {
               Notice
             </div>
           </div>
+          {/* Third Block */}
+          <div
+            onClick={() => {
+              navigate("/dashboard/attendanceReport");
+            }}
+            className="col-md-3 col"
+          >
+            <div className="text-center p-3 rounded mt-4 shadow border">
+              <i
+                style={{ fontSize: "100px" }}
+                className="fa-solid fa-chart-line"
+              ></i>
+              <br />
+              Attendance Report
+            </div>
+          </div>
         </div>
       </div>
     </>
