@@ -32,6 +32,7 @@ import StudentHomePage from "../student/StudentHomePage";
 import StudentAttendanceReport from "../student/StudentAttendanceReport";
 import StudentAllNotices from "../student/StudentAllNotices";
 import TeacherStudentAttendance from "../teacher/TeacherStudentAttendance";
+import TeacherAllNotices from "../teacher/TeacherAllNotices";
 
 const drawerWidth = 240;
 
@@ -113,6 +114,12 @@ const teacherRoutes = [
     path: "teacherStudentAttendance",
     element: <TeacherStudentAttendance/>,
     icon:  <i style={{ fontSize: "25px" }} className="fa-solid fa-clipboard-user"></i>,
+  },
+  {
+    name: "Notices",
+    path: "allNotices",
+    element: <TeacherAllNotices/>,
+    icon:  <i style={{ fontSize: "25px" }} className="fa-regular fa-clipboard"></i>,
   },
 ];
 

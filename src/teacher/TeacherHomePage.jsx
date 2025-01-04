@@ -24,7 +24,7 @@ const TeacherHomePage = () => {
                 className="fa-solid fa-clipboard-user"
               ></i>
               <br />
-              Attendance
+              Student Attendance
             </div>
           </div>
 
