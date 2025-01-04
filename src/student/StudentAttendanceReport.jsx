@@ -37,11 +37,22 @@ const StudentAttendanceReport = () => {
       console.log(error);
     }
   };
-  console.log("attendanceReport", attendanceReport);
-
   useEffect(() => {
     getStudentAttendance();
   }, []);
+
+  console.log("attendanceArray:", attendanceReport);
+  // Calculate the percentage of attended classes
+  const totalClasses = attendanceReport.length;
+  const attendedClasses = attendanceReport
+    .map((attendance) =>
+      attendance.attendance.filter((record) => record.status === "Present")
+    )
+    .flat().length;
+  const attendancePercentage = (attendedClasses / totalClasses) * 100;
+
+  // console.log("attendedClasses:", attendedClasses);
+  // console.log("totalClasses:", totalClasses);
   return (
     <div className="container-fluid">
       {loading ? <Loader /> : null}
@@ -68,12 +79,12 @@ const StudentAttendanceReport = () => {
                   </TableCell>
                   {attendance.attendance.map((record, i) => {
                     return (
-                      <>
+                      <React.Fragment key={i}>
                         <TableCell>{record.name}</TableCell>
                         <TableCell>{record.status}</TableCell>
                         <TableCell>{record.sClass} null</TableCell>
                         <TableCell>{record.section} null</TableCell>
-                      </>
+                      </React.Fragment>
                     );
                   })}
                 </TableRow>
@@ -82,9 +93,11 @@ const StudentAttendanceReport = () => {
           </TableBody>
         </Table>
       </TableContainer>
+      <div className="mt-3">
+        <p>Total Percentage: {attendancePercentage.toFixed(2)}%</p>
+      </div>
     </div>
   );
 };
 
 export default StudentAttendanceReport;
-
