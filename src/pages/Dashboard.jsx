@@ -34,6 +34,11 @@ import StudentAllNotices from "../student/StudentAllNotices";
 import TeacherStudentAttendance from "../teacher/TeacherStudentAttendance";
 import TeacherAllNotices from "../teacher/TeacherAllNotices";
 import TeacherAttendanceReport from "../teacher/TeacherAttendanceReport";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 
 const drawerWidth = 240;
 
@@ -90,6 +95,12 @@ const routes = [
     path: "allStudents",
     element: <AllStudents />,
     icon: <i style={{ fontSize: "25px" }} className="fa-solid fa-id-card"></i>,
+  },
+  {
+    name: "Profile",
+    path: "adminProfile",
+    element: <AdminProfile />,
+    icon: <i style={{ fontSize: "25px" }} className="fa-solid fa-user"></i>,
   },
 ];
 
@@ -207,6 +218,20 @@ export default function Dashboard() {
   const token = JSON.parse(localStorage.getItem("token"));
   const decoded = jwtDecode(token);
   console.log("decoded: ", decoded);
+  const [openLogoutDialog, setOpenLogoutDialog] = React.useState(false);
+
+  const handleLogoutClick = () => {
+    setOpenLogoutDialog(true);
+  };
+
+  const handleLogoutConfirm = () => {
+    localStorage.removeItem("token");
+    navigate("/");
+  };
+
+  const handleLogoutCancel = () => {
+    setOpenLogoutDialog(false);
+  };
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -299,10 +324,7 @@ export default function Dashboard() {
           {/* Logout button */}
           <Button
             sx={{ margin: "auto", display: "block", marginTop: "20px" }}
-            onClick={() => {
-              localStorage.removeItem("token");
-              navigate("/");
-            }}
+            onClick={handleLogoutClick}
             variant="contained"
           >
             Logout
@@ -328,6 +350,27 @@ export default function Dashboard() {
             ))}
         </Routes>
       </Main>
+      <Dialog
+        open={openLogoutDialog}
+        onClose={handleLogoutCancel}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{"Confirm Logout"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Are you sure you want to logout?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleLogoutCancel} color="primary">
+            No
+          </Button>
+          <Button onClick={handleLogoutConfirm} color="primary" autoFocus>
+            Yes
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 }

@@ -1,51 +1,32 @@
-import React from 'react'
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Container, Row, Col, Card } from 'react-bootstrap';
 
 const StudentHomePage = () => {
   const navigate = useNavigate();
   return (
-    <>
-      <div className="container-fluid">
-        <h1>Student Dashboard</h1>
-        {/* First Row */}
-        <div className="row">
-          {/* First Block */}
-          <div
-            onClick={() => {
-              navigate("/dashboard/studentAttendanceReport");
-            }}
-            className="col-md-3 col"
-          >
-            <div className="text-center p-3 rounded mt-4 shadow border">
-              <i
-                style={{ fontSize: "100px" }}
-                className="fa-solid fa-clipboard-user"
-              ></i>
-              <br />
-              Attendance
-            </div>
-          </div>
+    <Container fluid className="p-5 bg-light">
+      <h1 className="text-center mb-5">Student Dashboard</h1>
+      <Row className="g-4">
+        <Col xs={12} md={6}>
+          <Card className="text-center shadow-lg" onClick={() => navigate("/dashboard/studentAttendanceReport")}>
+            <Card.Body>
+              <i className="fa-solid fa-clipboard-user" style={{ fontSize: "100px", color: "#007bff" }}></i>
+              <Card.Title className="mt-3">Attendance</Card.Title>
+            </Card.Body>
+          </Card>
+        </Col>
+        <Col xs={12} md={6}>
+          <Card className="text-center shadow-lg" onClick={() => navigate("/dashboard/allNotices")}>
+            <Card.Body>
+              <i className="fa-regular fa-clipboard" style={{ fontSize: "100px", color: "#28a745" }}></i>
+              <Card.Title className="mt-3">Notice</Card.Title>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+    </Container>
+  );
+};
 
-          {/* Second Block */}
-          <div
-            onClick={() => {
-              navigate("/dashboard/allNotices");
-            }}
-            className="col-md-3 col"
-          >
-            <div className="text-center p-3 rounded mt-4 shadow border">
-              <i
-                style={{ fontSize: "100px" }}
-                className="fa-regular fa-clipboard"
-              ></i>
-              <br />
-              Notice
-            </div>
-          </div>
-        </div>
-      </div>
-    </>
-  )
-}
-
-export default StudentHomePage
+export default StudentHomePage;
